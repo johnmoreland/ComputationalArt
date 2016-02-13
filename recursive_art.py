@@ -33,8 +33,13 @@ def evaluate_random_function(f, x, y):
         >>> evaluate_random_function(["y"],0.1,0.02)
         0.02
     """
-    # TODO: implement this
-    pass
+    if f == ["x"]:
+        return x
+    elif f == ["y"]:
+        return y
+    else:
+        print 'Error'
+        return 
 
 
 def remap_interval(val,
@@ -144,17 +149,10 @@ if __name__ == '__main__':
     import doctest
     doctest.testmod()
 
-    print remap_interval(0.5, 0, 1, 0, 10)
-        # 5.0
-    print remap_interval(5, 4, 6, 0, 2)
-        # 1.0
-    print remap_interval(5, 4, 6, 1, 2)
-        # 1.5
-
     # Create some computational art!
     # TODO: Un-comment the generate_art function call after you
     #       implement remap_interval and evaluate_random_function
-    # generate_art("myart.png")
+    generate_art("myart.png")
 
     # Test that PIL is installed correctly
     # TODO: Comment or remove this function call after testing PIL install
