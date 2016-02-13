@@ -64,8 +64,12 @@ def remap_interval(val,
         >>> remap_interval(5, 4, 6, 1, 2)
         1.5
     """
-    # TODO: implement this
-    pass
+    val = val * 1.0 #cnvert val to a a int
+    input_delta = input_interval_end - input_interval_start
+    percent = (val-input_interval_start) / input_delta
+    output_delta = output_interval_end - output_interval_start
+    output_val = (percent*output_delta) + output_interval_start
+    return output_val
 
 
 def color_map(val):
@@ -140,6 +144,13 @@ if __name__ == '__main__':
     import doctest
     doctest.testmod()
 
+    print remap_interval(0.5, 0, 1, 0, 10)
+        # 5.0
+    print remap_interval(5, 4, 6, 0, 2)
+        # 1.0
+    print remap_interval(5, 4, 6, 1, 2)
+        # 1.5
+
     # Create some computational art!
     # TODO: Un-comment the generate_art function call after you
     #       implement remap_interval and evaluate_random_function
@@ -147,4 +158,4 @@ if __name__ == '__main__':
 
     # Test that PIL is installed correctly
     # TODO: Comment or remove this function call after testing PIL install
-    test_image("noise.png")
+    # test_image("noise.png")
