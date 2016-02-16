@@ -59,6 +59,7 @@ def evaluate_random_function(f, x, y):
     #     return a
     # def y(a,b):
     #     return b
+    
 
     if f == ["x"]:
         return x
