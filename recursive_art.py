@@ -1,5 +1,5 @@
 """ TODO: Put your header comment here """
-
+import math
 import random
 from PIL import Image
 
@@ -15,8 +15,22 @@ def build_random_function(min_depth, max_depth):
                  (see assignment writeup for details on the representation of
                  these functions)
     """
-    # TODO: implement this
-    pass
+
+    efl = ["prod","avg","cos_pi","sin_pi","x","y"] #elementary function list
+
+    if min_depth < 1 and random.choice([0,1]):
+        return random.choice([["x"],["y"]])
+
+    if max_depth < 1:
+        return random.choice([["x"],["y"]])
+    else:
+        randfunc = random.choice(efl)
+        if randfunc == "prod" or randfunc == "avg":
+            # print "got prod or avg"
+            return [randfunc, [build_random_function(min_depth-1, max_depth-1), build_random_function(min_depth-1, max_depth-1)]]
+        else:
+            return [randfunc, build_random_function(min_depth-1, max_depth-1)]
+
 
 
 def evaluate_random_function(f, x, y):
@@ -33,6 +47,19 @@ def evaluate_random_function(f, x, y):
         >>> evaluate_random_function(["y"],0.1,0.02)
         0.02
     """
+    # def prod(a,b):
+    #     return a*b*1.0
+    # def avg(a,b):
+    #     return .5(a+b)
+    # def cos_pi(a):
+    #     return math.cos(pi*a)
+    # def sin_pi(a):
+    #     return math.sin(pi*a)
+    # def x(a,b):
+    #     return a
+    # def y(a,b):
+    #     return b
+
     if f == ["x"]:
         return x
     elif f == ["y"]:
@@ -125,9 +152,9 @@ def generate_art(filename, x_size=350, y_size=350):
         x_size, y_size: optional args to set image dimensions (default: 350)
     """
     # Functions for red, green, and blue channels - where the magic happens!
-    red_function = ["x"]
-    green_function = ["y"]
-    blue_function = ["x"]
+    red_function = build_random_function(7, 9)
+    green_function = build_random_function(7, 9)
+    blue_function = build_random_function(7, 9)
 
     # Create image and loop over all pixels
     im = Image.new("RGB", (x_size, y_size))
@@ -149,10 +176,11 @@ if __name__ == '__main__':
     import doctest
     doctest.testmod()
 
+    print build_random_function(3,5)
     # Create some computational art!
     # TODO: Un-comment the generate_art function call after you
     #       implement remap_interval and evaluate_random_function
-    generate_art("myart.png")
+    # generate_art("myart.png")
 
     # Test that PIL is installed correctly
     # TODO: Comment or remove this function call after testing PIL install
