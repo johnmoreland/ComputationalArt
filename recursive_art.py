@@ -16,7 +16,7 @@ def build_random_function(min_depth, max_depth):
                  these functions)
     """
 
-    efl = ["prod","avg","cos_pi","sin_pi","x","y"] #elementary function list
+    efl = ["prod","avg","cos_pi","sin_pi","x","y", "dist", "inverseadd"] #elementary function list
 
     if min_depth < 1 and random.choice([0,1]):
         return random.choice([["x"],["y"]])
@@ -24,12 +24,12 @@ def build_random_function(min_depth, max_depth):
     if max_depth < 1:
         return random.choice([["x"],["y"]])
     else:
-        randfunc = random.choice(efl)
-        if randfunc == "prod" or randfunc == "avg":
+        randfunc = random.choice(efl) #choose a random function
+        if randfunc == "prod" or randfunc == "avg" or randfunc == "dist" or randfunc == "inverseadd" : #these functions take two arguments
             # print "got prod or avg"
             return [randfunc, [build_random_function(min_depth-1, max_depth-1), build_random_function(min_depth-1, max_depth-1)]]
         else:
-            return [randfunc, build_random_function(min_depth-1, max_depth-1)]
+            return [randfunc, [build_random_function(min_depth-1, max_depth-1)]]
 
 
 
@@ -42,29 +42,50 @@ def evaluate_random_function(f, x, y):
         y: the value of y to be used to evaluate the function
         returns: the function value
 
-        >>> evaluate_random_function(["x"],-0.5, 0.75)
+        >>> evaluate_random_function(["x"], -0.5, 0.75)
         -0.5
-        >>> evaluate_random_function(["y"],0.1,0.02)
+        >>> evaluate_random_function(["y"], 0.1, 0.02)
         0.02
+        >>> evaluate_random_function(["sin_pi",["x"]], 0, 1)
+        0.0
+        >>> evaluate_random_function(["cos_pi",["x"]], 0, 0.02)
+        1.0
+        >>> evaluate_random_function(["avg",[["x"], ["y"]]], 1, 2)
+        1.5
+        >>> evaluate_random_function(["prod",[["x"], ["y"]]], 0, 0.02)
+        0.0
+        >>> evaluate_random_function(["dist",[["x"],["y"]]], 3, 4)
+        5.0
+        >>> evaluate_random_function(["inverseadd",[["x"],["y"]]], 1, 1)
+        0.5
     """
-    # def prod(a,b):
-    #     return a*b*1.0
-    # def avg(a,b):
-    #     return .5(a+b)
-    # def cos_pi(a):
-    #     return math.cos(pi*a)
-    # def sin_pi(a):
-    #     return math.sin(pi*a)
-    # def x(a,b):
-    #     return a
-    # def y(a,b):
-    #     return b
-    
 
-    if f == ["x"]:
+    if f[0] == "x":
+        # print 'x:', x
         return x
-    elif f == ["y"]:
+        # return evaluate_random_function(f[1][0],x,y)
+    elif f[0] == "y":
+        # print 'y:', y
         return y
+        # return evaluate_random_function(f[1][2],x,y)
+    elif f[0] == "cos_pi":
+        # print 'cos_pi:', math.cos(math.pi*evaluate_random_function(f[1][0],x,y))
+        return math.cos(math.pi*evaluate_random_function(f[1][0],x,y))
+    elif f[0] == "sin_pi":
+        # print 'sin_pi:', math.sin(math.pi*evaluate_random_function(f[1][0],x,y))
+        return math.sin(math.pi*evaluate_random_function(f[1][0],x,y))
+    elif f[0] == "avg":
+        # print "avg:", evaluate_random_function(f[1][0],x,y) * evaluate_random_function(f[1][1],x,y) * .5
+        return (evaluate_random_function(f[1][0],x,y) + evaluate_random_function(f[1][1],x,y)) * .5
+    elif f[0] == "prod":
+        # print "prod:", evaluate_random_function(f[1][0],x,y) * evaluate_random_function(f[1][1],x,y) * 1.0
+        return evaluate_random_function(f[1][0],x,y) * evaluate_random_function(f[1][1],x,y) * 1.0
+    elif f[0] == "dist":
+        # print "dist:", evaluate_random_function(f[1][0],x,y) * evaluate_random_function(f[1][1],x,y) * 1.0
+        return math.sqrt(evaluate_random_function(f[1][0],x,y)**2 + evaluate_random_function(f[1][1],x,y)**2)
+    elif f[0] == "inverseadd":
+        # print "inverseadd:", evaluate_random_function(f[1][0],x,y) * evaluate_random_function(f[1][1],x,y) * 1.0
+        return (1/abs((1.0/evaluate_random_function(f[1][0],x,y)) + (1.0/evaluate_random_function(f[1][1],x,y))))
     else:
         print 'Error'
         return 
@@ -176,8 +197,10 @@ def generate_art(filename, x_size=350, y_size=350):
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
-
-    print build_random_function(3,5)
+    func =  build_random_function(1,1)
+    output =  evaluate_random_function(func,-.5,.4)
+    print func
+    print output
     # Create some computational art!
     # TODO: Un-comment the generate_art function call after you
     #       implement remap_interval and evaluate_random_function
