@@ -4,14 +4,14 @@ Author: John Moreland
 """
 import math
 import random
-from PIL import Image
+from PIL import Image, ImageSequence
 
 def build_random_function(min_depth, max_depth):
     """ Builds a random function of depth at least min_depth and depth
         at most max_depth (see assignment writeup for definition of depth
         in this context)
 
-        min_depth: the minimum depth of the random function
+        min_depth: hte minimum depth of the random function
         max_depth: the maximum depth of the random function
         returns: the randomly generated function represented as a nested list
                  (see assignment writeup for details on the representation of
@@ -132,7 +132,7 @@ def color_map(val):
     return int(color_code)
 
 def test_image(filename, x_size=350, y_size=350):
-    """ Generate test image with random pixels and save as an image file.
+    """ Generate test image with random pixels and save as an iamge file.
 
         filename: string filename for image (should be .png)
         x_size, y_size: optional args to set image dimensions (default: 350)
@@ -150,7 +150,7 @@ def test_image(filename, x_size=350, y_size=350):
 
     im.save(filename)
 
-def generate_art(filename, x_size=350, y_size=350):
+def generate_art(filename, x_size=500, y_size=500):
     """ Generate computational art and save as an image file.
 
         filename: string filename for image (should be .png)
@@ -161,9 +161,9 @@ def generate_art(filename, x_size=350, y_size=350):
     green_function = build_random_function(7, 9)
     blue_function = build_random_function(7, 9)
 
-    print "red_function", red_function
-    print "green_function", green_function
-    print "blue_function", blue_function
+    # print "red_function", red_function
+    # print "green_function", green_function
+    # print "blue_function", blue_function
 
     # Create image and loop over all pixels
     im = Image.new("RGB", (x_size, y_size))
@@ -198,7 +198,6 @@ def generate_art_custom(filename, red_function, green_function, blue_function, x
                     color_map(evaluate_random_function(green_function, x, y)),
                     color_map(evaluate_random_function(blue_function, x, y))
                     )
-
     im.save(filename)
 
 def generate_art_loop(base_file_name, number_of_iterations):
@@ -208,11 +207,12 @@ def generate_art_loop(base_file_name, number_of_iterations):
         number_of_iterations: amount of paintings you want
     """
     i=0
-    while i < number_of_iterations:
+    for i in range(number_of_iterations):
         filename = base_file_name + str(i) + ".png"
         generate_art(filename)
         i += 1
         print "art pieces made:", i , "/", number_of_iterations
+
 
 
 if __name__ == '__main__':
@@ -220,9 +220,10 @@ if __name__ == '__main__':
     doctest.testmod()
 
     # Create some computational art!
-
     # generate_art("myart.png")
-    generate_art_loop('moreArt', 5)
+    generate_art_loop('frames', 20)
+
+    #create a video by invoking $ avconv -i frames%d.png -vb 20M movie.avi
 
     #found a cool art piece? uncomment the function below and input your color functions!
     # generate_art_custom('hqtest', )
